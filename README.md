@@ -109,20 +109,21 @@ tpcds-airflow-spark-etl-pipeline/
 ### Prerequisites
 - Docker & Docker Compose
 - minIO server (or your Data Lake service of choice)
-- Astro CLI (pip install astro or follow Astro CLI docs)
+- Astro CLI (follow Astro CLI [docs](https://www.astronomer.io/docs/astro/cli/install-cli))
 - Python 3.9+
 - Access to the TPC-DS dataset loaded into PostgreSQL
 
 ### 1. Clone the Repository
+```bash
 git clone https://github.com/Matzo77/TPCDS-Airflow-Spark-ETL-Pipeline.git
-cd tpcds-airflow-spark-etl-pipeline
-
+cd TPCDS-Airflow-Spark-ETL-Pipeline
+```
 ### 2. Start Airflow with Astro CLI and Configture the Network
 - first start Airflow by running this command:
 ```bash
 astro dev start
 ```
-- Then run
+- Then run:
 ```bash
 docker network ls
 ```
