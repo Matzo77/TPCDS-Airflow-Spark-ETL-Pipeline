@@ -1,0 +1,57 @@
+# # version: '3.8' This attribute is obsolete
+
+services:
+
+  init-mounts:
+    image: busybox:latest
+    command: sh /mnt/mounts/init_mounts.sh
+    volumes:
+      - ./data/:/mnt/
+    restart: "no"
+
+  # --- Superset Metadata Database (Postgres) ---
+  superset-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: superset
+      POSTGRES_PASSWORD: superset
+      POSTGRES_DB: superset
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./data/superset/postgres-data:/var/lib/postgresql/data
+    depends_on:
+      - init-mounts
+    networks:
+      - portfolio-project-network
+
+  # --- Apache Superset ---
+  superset:
+    build:
+      context: .
+      dockerfile: superset_image/Dockerfile
+    environment:
+      SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://superset:superset@superset-db:5432/superset"
+      MINIO_ENDPOINT: "http://shared-minio:9000"
+      MINIO_ACCESS_KEY: "minioadmin"
+      MINIO_SECRET_KEY: "minioadmin"
+      MINIO_BUCKET: "portfolio-project"
+      SUPERSET_LOAD_EXAMPLES: "no"
+      SUPERSET_SECRET_KEY: "supersecretkey"
+    ports:
+      - "8088:8088"
+    depends_on:
+      - superset-db
+      - init-mounts
+    volumes:
+      - ./data/superset/home:/app/superset_home
+      - ./data/duckdb:/duckdb_data
+    networks:
+      - portfolio-project-network
+
+# --- NETWORKS ---
+
+networks:
+  portfolio-project-network: # 👈 The network name to be used accross all containers
+    external: true
+    name: airflow_9596ed_airflow   # 👈 match EXACTLY from `docker network ls`. Since I am using "Astro CLI" for airflow, the network will be created by Astro CLI

@@ -1,0 +1,3 @@
+nano
+telnet
+openjdk-17-jdk

@@ -1,0 +1,25 @@
+# ==========================================================
+# Global Configuration for Portfolio Project 
+# ==========================================================
+
+# ----------------------------------------------------------
+# PostgreSQL (source database)
+# Change the infomration here to match your data source
+# ----------------------------------------------------------
+postgres:
+  host: 172.28.235.190        
+  port: 5433                  
+  database: tpcds_updated     
+  username: admin             
+  schema: raw                 
+
+# ----------------------------------------------------------
+# MinIO (data lake)
+# Change the infomration here for your preferred datalake service
+# ----------------------------------------------------------
+
+minio:
+  endpoint: shared-minio:9000 
+  secure: false
+  bucket: portfolio-project
+

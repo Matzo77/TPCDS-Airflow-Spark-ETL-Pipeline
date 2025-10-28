@@ -1,0 +1,53 @@
+services:
+
+  prestart:
+    image: bash:5
+    container_name: prestart
+    volumes:
+      - ./spark_script:/app
+      - ./spark_script/spark_jars:/app/spark_jars
+    working_dir: /app
+    command: >
+      bash -c "
+        mkdir -p /app/spark_jars &&
+        chmod +x /app/init_spark_jars.sh &&
+        chmod -R 755 /app/spark_jars &&
+        bash /app/init_spark_jars.sh
+      "
+    networks:
+      - portfolio-project-network
+
+  # --- Spark Master ---
+  spark-master:
+    image: apache/spark:latest
+    container_name: spark-master
+    hostname: spark-master
+    command: bash -c "cp /tmp/jars/*.jar /opt/spark/jars/ && /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master"
+    ports:
+      - "8082:8080"  # UI
+      - "7077:7077"  # Spark master port
+    volumes:
+      - ./spark_script/spark_jars:/tmp/jars
+      - ./airflow/spark_jobs:/opt/spark/spark_jobs
+    networks:
+      - portfolio-project-network
+
+  # --- Spark Worker ---
+  spark-worker:
+    image: apache/spark:latest
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    command: bash -c "cp /tmp/jars/*.jar /opt/spark/jars/ && /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077"
+    environment:
+      - SPARK_WORKER_MEMORY=4G
+    volumes:
+      - ./spark_script/spark_jars:/tmp/jars
+      - ./airflow/spark_jobs:/opt/spark/spark_jobs
+    networks:
+      - portfolio-project-network
+
+networks:
+  portfolio-project-network: # The network name to be used accross all containers
+    external: true
+    name: airflow_9596ed_airflow   # match EXACTLY from `docker network ls`
