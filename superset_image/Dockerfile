@@ -1,7 +1,5 @@
 # --------------------------------------------------------------------------------
-# You would have to run this commmand:
-# docker build -f superset_image/Dockerfile -t portfolio_project_superset:latest . from the main directory of your project
-# before starting the docker-compose.superset.yml
+# Custom superset image used in `docker-compose.superset.yml` file
 # --------------------------------------------------------------------------------
 
 FROM apache/superset:latest

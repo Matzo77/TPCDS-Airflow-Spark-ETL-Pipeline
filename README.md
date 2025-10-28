@@ -114,15 +114,21 @@ tpcds-airflow-spark-etl-pipeline/
 - Access to the TPC-DS dataset loaded into PostgreSQL
 
 ### 1. Clone the Repository
-git clone https://github.com/Matzo77/tpcds-airflow-spark-etl-pipeline.git
+git clone https://github.com/Matzo77/TPCDS-Airflow-Spark-ETL-Pipeline.git
 cd tpcds-airflow-spark-etl-pipeline
 
-### 2. Start Airflow with Astro CLI
+### 2. Start Airflow with Astro CLI and Configture the Network
+- first start Airflow by running this command:
 ```bash
 astro dev start
 ```
+- Then run
+```bash
+docker network ls
+```
+and find the name of the network that Airflow is using. You should then go to `docker-compose.superset.yml` and `docker-compose.spark.yml` files, and update the network name.
 
-### 3. Create the required connection in Airflow UI
+### 3. Create the required connections in Airflow UI
 
 ```text
 | ID | Connection ID           | Type     | Host / Endpoint          | Schema | Login / User   | Password     | Port | Extra / Notes                                                                                                                          |
