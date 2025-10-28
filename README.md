@@ -121,6 +121,7 @@ cd TPCDS-Airflow-Spark-ETL-Pipeline
 ### 2. Start Airflow with Astro CLI and Configture the Network
 - first start Airflow by running this command:
 ```bash
+cd airflow
 astro dev start
 ```
 - Then run:
