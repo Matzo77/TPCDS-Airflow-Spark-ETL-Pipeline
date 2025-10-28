@@ -148,7 +148,7 @@ and find the name of the network that Airflow is using. You should then go to `d
 docker-compose -f docker-compose.spark.yml up -d
 ```
 
-### 5. Run the Data Loding and ETL Dags
+### 5. Run the Data Loading and ETL Dags
 In the Airflow UI:
 - Trigger load_daily_tables_dag to load raw data into CSV format and dump into /RAW directory
 - Trigger tpcds_etl_dag to read the CSV files, transform and save them in Parquet format under /ANALYTICS directory
